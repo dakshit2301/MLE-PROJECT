@@ -1,0 +1,7 @@
+model,cv_r2_mean,cv_r2_std,cv_mae,cv_mse,cv_rmse,train_time_s,stage
+DummyRegressor,-0.0001,0.0001,2.8673,15.3933,3.9157,0.2,default
+LinearRegression,0.7171,0.0731,0.5062,4.4952,2.082,0.2,default
+RandomForestRegressor,0.6213,0.0565,1.1631,5.9377,2.4141,2.2,default
+GradientBoostingRegressor,0.6727,0.0663,0.862,5.1648,2.2428,1.9,default
+RandomForestRegressor (tuned),0.6401,0.0608,1.0953,5.6568,2.3784,31.3,tuned
+GradientBoostingRegressor (tuned),0.6977,0.0705,0.6876,4.7869,2.1879,12.6,tuned

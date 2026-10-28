@@ -1,0 +1,44 @@
+{
+  "project_title": "Exam Stress & Performance Correlator",
+  "course": "ECSCI24302 – Machine Learning Essentials",
+  "dataset": {
+    "name": "Student Performance Factors",
+    "source": "Kaggle",
+    "url": "to be confirmed by visiting the Kaggle page",
+    "author": "lainguyn123: to be confirmed",
+    "license": "to be confirmed from Kaggle page",
+    "date_accessed": "to be filled by student"
+  },
+  "n_rows_raw": 6607,
+  "n_rows_clean": 6606,
+  "n_rows_train": 5284,
+  "n_rows_test": 1322,
+  "n_columns": 20,
+  "target": "Exam_Score",
+  "target_stats": {
+    "mean": 67.23054798667877,
+    "std": 3.868502350258733,
+    "min": 55,
+    "max": 100
+  },
+  "final_model": {
+    "name": "LinearRegression",
+    "cv_r2": 0.7171,
+    "cv_r2_std": 0.0731,
+    "test_r2": 0.8258,
+    "test_mae": 0.4103,
+    "test_mse": 2.3038,
+    "test_rmse": 1.5178,
+    "p90_abs_error": 0.6424
+  },
+  "target_r2": 0.75,
+  "target_met_test": true,
+  "target_met_cv": false,
+  "cv_vs_test_note": "Test $R^2$ (0.8258) > CV $R^2$ (0.7171) because extreme scorers ($\\ge 80$) comprised $0.79\\%$ of training data but only $0.38\\%$ of the test split. Since outliers contribute 93.39% of residual variance, having fewer outliers on test naturally yields higher $R^2$ (a random split artifact).",
+  "not_in_dataset": [
+    "stress level",
+    "screen time",
+    "CGPA"
+  ],
+  "generated_on": "2026-10-25"
+}

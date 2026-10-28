@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="A local, transparent study lab for exploring a student performance model and its evidence.">
+    <meta name="theme-color" content="#0D1117" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F7F3EA" media="(prefers-color-scheme: light)">
+    <title>Study Lab — Exam Score Predictor</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230D1117'/%3E%3Cpath d='M18 17h28v6H25v8h18v6H25v10h22v6H18z' fill='%23E8E4DA'/%3E%3Ccircle cx='48' cy='17' r='5' fill='%23F2B84B'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("study-lab-theme") || "";
+        } catch {
+          theme = "";
+        }
+        if (theme !== "light" && theme !== "dark") {
+          theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <script defer src="vendor/chart.umd.min.js" data-chart-engine></script>
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="topbar" id="site-header">
+      <div class="container topbar__inner">
+        <a class="wordmark" href="#/home" aria-label="Study Lab home">
+          <span class="wordmark__dot" aria-hidden="true"></span>
+          <span>Study Lab</span>
+        </a>
+        <nav class="primary-nav" id="primary-navigation" aria-label="Primary navigation">
+          <a class="primary-nav__link" href="#/home" data-route="home">Home</a>
+          <a class="primary-nav__link" href="#/predict" data-route="predict">Predict</a>
+          <a class="primary-nav__link" href="#/explore" data-route="explore">Explore</a>
+          <a class="primary-nav__link" href="#/models" data-route="models">Models</a>
+          <a class="primary-nav__link" href="#/importance" data-route="importance">Importance</a>
+          <a class="primary-nav__link" href="#/errors" data-route="errors">Errors</a>
+          <details class="primary-nav__more" id="desktop-more">
+            <summary>More</summary>
+            <div class="primary-nav__menu">
+              <a href="#/method" data-route="method">Method</a>
+              <a href="#/viva" data-route="viva">Viva practice</a>
+            </div>
+          </details>
+        </nav>
+        <div class="topbar__actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme">
+            <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.2 15.1A8.3 8.3 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"></path>
+            </svg>
+            <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <a class="mobile-nav__link" href="#/home" data-route="home" aria-label="Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg>
+        <span>Home</span>
+      </a>
+      <a class="mobile-nav__link" href="#/predict" data-route="predict" aria-label="Predict">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"></path></svg>
+        <span>Predict</span>
+      </a>
+      <a class="mobile-nav__link" href="#/explore" data-route="explore" aria-label="Explore">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <span>Explore</span>
+      </a>
+      <a class="mobile-nav__link" href="#/models" data-route="models" aria-label="Models">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19h16M6 16V9m6 7V4m6 12v-5"></path></svg>
+        <span>Models</span>
+      </a>
+      <button class="mobile-nav__more" type="button" data-open-more aria-haspopup="dialog" aria-controls="more-sheet">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg>
+        <span>More</span>
+      </button>
+    </nav>
+    <dialog class="more-sheet" id="more-sheet" aria-labelledby="more-sheet-title">
+      <div class="cluster">
+        <h2 class="h3" id="more-sheet-title">More pages</h2>
+        <button class="button button--ghost button--sm" type="button" data-close-more>Close</button>
+      </div>
+      <nav class="more-sheet__links" aria-label="More pages">
+        <a href="#/importance" data-route="importance">Importance</a>
+        <a href="#/errors" data-route="errors">Errors</a>
+        <a href="#/method" data-route="method">Method</a>
+        <a href="#/viva" data-route="viva">Viva practice</a>
+      </nav>
+    </dialog>
+    <main class="site-main container" id="main" tabindex="-1" aria-live="polite"></main>
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <p id="dataset-credit">Dataset credit loading…</p>
+        <p>College PBL project — ECSCI24302</p>
+        <p class="site-footer__honesty">Correlation is not prediction, and prediction is not causation.</p>
+      </div>
+    </footer>
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <p class="visually-hidden chart-engine-warning" id="chart-engine-warning" role="status" hidden>Chart.js could not be loaded. Data tables remain available for chart content.</p>
+    <noscript>
+      <div class="container callout callout--warning">
+        <p class="callout__text">Study Lab needs JavaScript enabled to load its local project data and page navigation.</p>
+      </div>
+    </noscript>
+  </body>
+</html>

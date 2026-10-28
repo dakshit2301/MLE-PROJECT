@@ -1,0 +1,168 @@
+{
+  "final_table": [
+    {
+      "Model": "DummyRegressor",
+      "CV_R2_mean": -0.0001,
+      "CV_R2_std": 0.0001,
+      "CV_R2 (mean ± std)": "-0.0001 ± 0.0001",
+      "Test_MAE": 2.7629,
+      "Test_MSE": 13.2503,
+      "Test_RMSE": 3.6401,
+      "Test_R2": -0.002,
+      "stage": "final"
+    },
+    {
+      "Model": "LinearRegression",
+      "CV_R2_mean": 0.7171,
+      "CV_R2_std": 0.0731,
+      "CV_R2 (mean ± std)": "0.7171 ± 0.0731",
+      "Test_MAE": 0.4103,
+      "Test_MSE": 2.3038,
+      "Test_RMSE": 1.5178,
+      "Test_R2": 0.8258,
+      "stage": "final"
+    },
+    {
+      "Model": "RandomForest (tuned)",
+      "CV_R2_mean": 0.6401,
+      "CV_R2_std": 0.0608,
+      "CV_R2 (mean ± std)": "0.6401 ± 0.0608",
+      "Test_MAE": 0.9752,
+      "Test_MSE": 3.439,
+      "Test_RMSE": 1.8544,
+      "Test_R2": 0.7399,
+      "stage": "final"
+    },
+    {
+      "Model": "GradientBoosting (tuned)",
+      "CV_R2_mean": 0.6977,
+      "CV_R2_std": 0.0705,
+      "CV_R2 (mean ± std)": "0.6977 ± 0.0705",
+      "Test_MAE": 0.5676,
+      "Test_MSE": 2.5062,
+      "Test_RMSE": 1.5831,
+      "Test_R2": 0.8105,
+      "stage": "final"
+    }
+  ],
+  "cv": {
+    "stage": "default",
+    "rows": [
+      {
+        "model": "DummyRegressor",
+        "cv_r2_mean": -0.0001,
+        "cv_r2_std": 0.0001,
+        "cv_mae": 2.8673,
+        "cv_mse": 15.3933,
+        "cv_rmse": 3.9157,
+        "train_time_s": 0.2,
+        "stage": "default"
+      },
+      {
+        "model": "LinearRegression",
+        "cv_r2_mean": 0.7171,
+        "cv_r2_std": 0.0731,
+        "cv_mae": 0.5062,
+        "cv_mse": 4.4952,
+        "cv_rmse": 2.082,
+        "train_time_s": 0.2,
+        "stage": "default"
+      },
+      {
+        "model": "RandomForestRegressor",
+        "cv_r2_mean": 0.6213,
+        "cv_r2_std": 0.0565,
+        "cv_mae": 1.1631,
+        "cv_mse": 5.9377,
+        "cv_rmse": 2.4141,
+        "train_time_s": 2.2,
+        "stage": "default"
+      },
+      {
+        "model": "GradientBoostingRegressor",
+        "cv_r2_mean": 0.6727,
+        "cv_r2_std": 0.0663,
+        "cv_mae": 0.862,
+        "cv_mse": 5.1648,
+        "cv_rmse": 2.2428,
+        "train_time_s": 1.9,
+        "stage": "default"
+      }
+    ],
+    "per_fold_r2": [],
+    "per_fold_r2_note": "Per-fold R² values were not saved in cv_results.csv."
+  },
+  "tuning": {
+    "RandomForestRegressor": {
+      "param_grid": {
+        "model__n_estimators": [
+          100,
+          200
+        ],
+        "model__max_depth": [
+          5,
+          10,
+          null
+        ],
+        "model__min_samples_leaf": [
+          1,
+          5,
+          10
+        ],
+        "model__max_features": [
+          0.5,
+          1.0
+        ]
+      },
+      "best_params": {
+        "model__max_depth": null,
+        "model__max_features": 0.5,
+        "model__min_samples_leaf": 1,
+        "model__n_estimators": 200
+      },
+      "best_cv_r2": 0.6401,
+      "best_cv_r2_std": 0.0608,
+      "default_cv_r2": 0.6213,
+      "overfit_gap": 0.31
+    },
+    "GradientBoostingRegressor": {
+      "param_grid": {
+        "model__n_estimators": [
+          100,
+          200,
+          300
+        ],
+        "model__learning_rate": [
+          0.03,
+          0.05,
+          0.1
+        ],
+        "model__max_depth": [
+          1,
+          2,
+          3
+        ]
+      },
+      "best_params": {
+        "model__learning_rate": 0.1,
+        "model__max_depth": 2,
+        "model__n_estimators": 300
+      },
+      "best_cv_r2": 0.6977,
+      "best_cv_r2_std": 0.0705,
+      "default_cv_r2": 0.6727,
+      "overfit_gap": 0.0489
+    }
+  },
+  "selected_model": "LinearRegression",
+  "selection_rule_text": "1. Primary: highest mean CV R². LinearRegression leads with CV R² = 0.7171 (gap of 0.0194 > 0.01 threshold over tuned GradientBoosting).\n2. Simplicity & Interpretability: LinearRegression is the most interpretable candidate (19 closed-form coefficients).\n3. Overfitting Check: LinearRegression has no overfitting gap, whereas RandomForest shows severe overfitting (gap = 0.31 > 0.15 flag).\n4. MAE / RMSE Concordance: LinearRegression achieves lowest CV MAE (0.5062 marks) and lowest RMSE (2.0820 marks).",
+  "target_status": {
+    "threshold": 0.75,
+    "target_met_test": true,
+    "target_met_cv": false,
+    "test_r2": 0.8258,
+    "cv_r2": 0.7171,
+    "recorded_target_line": "`Final model test R² = 0.8258 ; target = 0.75 ; target met: YES`",
+    "recorded_cv_status": "Best CV R² (default models): 0.7171 (LR) — below 0.75 on CV"
+  }
+}

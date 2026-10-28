@@ -1,0 +1,91 @@
+:root {
+  color-scheme: dark;
+  --bg: #0D1117;
+  --bg-elev: #151B24;
+  --bg-sunken: #0A0E14;
+  --line: #26303D;
+  --text: #E8E4DA;
+  --text-dim: #9AA4B2;
+  --amber: #F2B84B;
+  --amber-text: #F2B84B;
+  --teal: #3FD0C0;
+  --teal-text: #3FD0C0;
+  --rose: #F0707A;
+  --ok: #7BD389;
+  --sky: #6FA8FF;
+  --sand: #CBB994;
+  --series-1: #F2B84B;
+  --series-2: #3FD0C0;
+  --series-3: #F0707A;
+  --series-4: #6FA8FF;
+  --series-5: #CBB994;
+  --font-heading: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --fs-hero: clamp(2.4rem, 5vw, 4.2rem);
+  --fs-h2: clamp(1.6rem, 3vw, 2.4rem);
+  --fs-h3: 1.25rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 2.5rem;
+  --s-8: 3rem;
+  --s-9: 4rem;
+  --s-10: 6rem;
+  --radius-sm: 0.625rem;
+  --radius-card: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 999px;
+  --border-width: 1px;
+  --shadow-soft: 0 16px 40px rgb(0 0 0 / 0.14);
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.035);
+  --z-base: 0;
+  --z-sticky: 20;
+  --z-overlay: 40;
+  --z-toast: 60;
+  --motion-fast: 160ms;
+  --motion-panel: 320ms;
+  --motion-slow: 700ms;
+  --ease-study: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --content-width: 1180px;
+  --header-height: 4.75rem;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F7F3EA;
+  --bg-elev: #FFFFFF;
+  --bg-sunken: #EFE9DC;
+  --line: #DDD4C2;
+  --text: #1B1F27;
+  --text-dim: #5B6472;
+  --amber: #C98A0B;
+  --amber-text: #8B5E00;
+  --teal: #0E8F82;
+  --teal-text: #08736B;
+  --rose: #C2414B;
+  --ok: #2E8B45;
+  --sky: #2F67B2;
+  --sand: #766647;
+  --series-1: #8B5E00;
+  --series-2: #0E8F82;
+  --series-3: #C2414B;
+  --series-4: #2F67B2;
+  --series-5: #766647;
+  --shadow-soft: 0 16px 40px rgb(43 35 21 / 0.1);
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0.01ms;
+    --motion-panel: 0.01ms;
+    --motion-slow: 0.01ms;
+    scroll-behavior: auto;
+  }
+}

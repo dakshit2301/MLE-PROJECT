@@ -1,0 +1,137 @@
+{
+  "random_state": 42,
+  "target": "Exam_Score",
+  "chosen_set": "A",
+  "numeric_cols": [
+    "Hours_Studied",
+    "Attendance",
+    "Sleep_Hours",
+    "Previous_Scores",
+    "Tutoring_Sessions",
+    "Physical_Activity"
+  ],
+  "ordinal_cols": [
+    "Parental_Involvement",
+    "Access_to_Resources",
+    "Motivation_Level",
+    "Family_Income",
+    "Teacher_Quality",
+    "Peer_Influence",
+    "Parental_Education_Level",
+    "Distance_from_Home",
+    "Extracurricular_Activities",
+    "Internet_Access",
+    "School_Type",
+    "Learning_Disabilities",
+    "Gender"
+  ],
+  "engineered_features": [],
+  "dropped_features": [
+    "Active_Total",
+    "Has_Tutoring",
+    "Sleep_Category",
+    "Sleep_Deficit",
+    "Study_per_Sleep",
+    "Study_x_Attendance"
+  ],
+  "category_orders": {
+    "Parental_Involvement": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "Access_to_Resources": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "Motivation_Level": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "Family_Income": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "Teacher_Quality": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "Peer_Influence": [
+      "Negative",
+      "Neutral",
+      "Positive"
+    ],
+    "Parental_Education_Level": [
+      "High School",
+      "College",
+      "Postgraduate"
+    ],
+    "Distance_from_Home": [
+      "Near",
+      "Moderate",
+      "Far"
+    ],
+    "Extracurricular_Activities": [
+      "No",
+      "Yes"
+    ],
+    "Internet_Access": [
+      "No",
+      "Yes"
+    ],
+    "School_Type": [
+      "Public",
+      "Private"
+    ],
+    "Learning_Disabilities": [
+      "No",
+      "Yes"
+    ],
+    "Gender": [
+      "Male",
+      "Female"
+    ]
+  },
+  "cv_table": {
+    "A": {
+      "n_features": 19,
+      "lr_r2_mean": 0.7171,
+      "lr_r2_std": 0.0731,
+      "lr_mae": 0.5062,
+      "gb_r2_mean": 0.6727,
+      "gb_r2_std": 0.0663,
+      "gb_mae": 0.862
+    },
+    "B": {
+      "n_features": 25,
+      "lr_r2_mean": 0.7167,
+      "lr_r2_std": 0.0731,
+      "lr_mae": 0.5111,
+      "gb_r2_mean": 0.6722,
+      "gb_r2_std": 0.0657,
+      "gb_mae": 0.8441
+    },
+    "C": {
+      "n_features": 17,
+      "lr_r2_mean": 0.7173,
+      "lr_r2_std": 0.0729,
+      "lr_mae": 0.5056,
+      "gb_r2_mean": 0.6731,
+      "gb_r2_std": 0.0658,
+      "gb_mae": 0.8591
+    },
+    "D": {
+      "n_features": 23,
+      "lr_r2_mean": 0.7169,
+      "lr_r2_std": 0.0729,
+      "lr_mae": 0.5104,
+      "gb_r2_mean": 0.6732,
+      "gb_r2_std": 0.0655,
+      "gb_mae": 0.8433
+    }
+  }
+}

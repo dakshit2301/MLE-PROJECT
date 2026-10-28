@@ -1,0 +1,44 @@
+{
+  "missing_by_column": {
+    "Teacher_Quality": 78,
+    "Parental_Education_Level": 90,
+    "Distance_from_Home": 67
+  },
+  "rows_with_multiple_missing": 6,
+  "n_duplicates": 0,
+  "n_invalid_exam_score": 1,
+  "iqr_outlier_counts": {
+    "Hours_Studied": {
+      "n_below": 21,
+      "n_above": 22
+    },
+    "Attendance": {
+      "n_below": 0,
+      "n_above": 0
+    },
+    "Sleep_Hours": {
+      "n_below": 0,
+      "n_above": 0
+    },
+    "Previous_Scores": {
+      "n_below": 0,
+      "n_above": 0
+    },
+    "Tutoring_Sessions": {
+      "n_below": 0,
+      "n_above": 430
+    },
+    "Physical_Activity": {
+      "n_below": 0,
+      "n_above": 0
+    },
+    "Exam_Score": {
+      "n_below": 28,
+      "n_above": 76
+    }
+  },
+  "n_high_score_ge_80": 48,
+  "target_skew": 1.6448,
+  "target_kurtosis": 10.5754,
+  "leakage_notes": "No feature has |Pearson r| > 0.95 with Exam_Score. Previous_Scores is allowed (earlier exam). No target-derived feature."
+}

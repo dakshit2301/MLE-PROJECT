@@ -1,0 +1,5 @@
+Model,CV_R2_mean,CV_R2_std,CV_R2 (mean ± std),Test_MAE,Test_MSE,Test_RMSE,Test_R2,stage
+DummyRegressor,-0.0001,0.0001,-0.0001 ± 0.0001,2.7629,13.2503,3.6401,-0.002,final
+LinearRegression,0.7171,0.0731,0.7171 ± 0.0731,0.4103,2.3038,1.5178,0.8258,final
+RandomForest (tuned),0.6401,0.0608,0.6401 ± 0.0608,0.9752,3.439,1.8544,0.7399,final
+GradientBoosting (tuned),0.6977,0.0705,0.6977 ± 0.0705,0.5676,2.5062,1.5831,0.8105,final

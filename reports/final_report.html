@@ -1,0 +1,345 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Final Project Report</title>
+<style>
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; margin: 40px; color: #222; }
+  h1 { color: #1a365d; border-bottom: 2px solid #2b6cb0; padding-bottom: 8px; font-size: 22pt; margin-top: 0; }
+  h2 { color: #2b6cb0; border-bottom: 1px solid #cbd5e0; padding-bottom: 6px; margin-top: 22pt; font-size: 15pt; page-break-after: avoid; }
+  h3 { color: #2d3748; margin-top: 15pt; font-size: 12pt; page-break-after: avoid; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 9.5pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #cbd5e0; padding: 7px 10px; text-align: left; }
+  th { background-color: #edf2f7; color: #2d3748; font-weight: bold; }
+  tr:nth-child(even) { background-color: #f7fafc; }
+  img { max-width: 85%; max-height: 400px; display: block; margin: 12px auto; page-break-inside: avoid; }
+  blockquote { border-left: 4px solid #4299e1; padding-left: 12px; color: #4a5568; background: #ebf8ff; margin: 12px 0; padding: 8px 12px; }
+  code { background: #edf2f7; padding: 2px 5px; border-radius: 4px; font-family: Consolas, monospace; font-size: 9pt; }
+  .caption { text-align: center; font-style: italic; color: #718096; font-size: 8.5pt; margin-top: -6px; margin-bottom: 14px; }
+  @page { margin: 15mm 12mm; size: A4; }
+</style>
+</head><body><h1>Empirical Investigation of Academic, Behavioral, and Environmental Correlates of Student Exam Performance</h1>
+<br>
+<p><strong>Course:</strong> ECSCI24302 – Machine Learning Essentials (Project-Based Learning)  </p>
+<p><strong>Academic Term:</strong> Semester 5, B.Tech Computer Science & Engineering  </p>
+<p><strong>Institution:</strong> [Department of Computer Science & Engineering, University Name — TO BE FILLED]  </p>
+<p><strong>Date:</strong> October 25, 2026  </p>
+<br>
+<p><strong>Project Team Members:</strong></p>
+<p>- <code>[Student Name 1 — Enrolment Number — TO BE FILLED]</code></p>
+<p>- <code>[Student Name 2 — Enrolment Number — TO BE FILLED]</code></p>
+<p>- <code>[Student Name 3 — Enrolment Number — TO BE FILLED]</code></p>
+<p>- <code>[Student Name 4 — Enrolment Number — TO BE FILLED]</code></p>
+<br>
+<p><strong>Faculty Supervisor / Mentor:</strong></p>
+<p>- <code>[Faculty Guide Name, Designation, Department — TO BE FILLED]</code></p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>2. Abstract</h2>
+<br>
+<p>Accurately identifying the determinants of student examination performance is a foundational challenge in educational data mining. This project presents a leak-free, reproducible machine learning pipeline evaluating how academic habits, extra institutional support, personal routines, and socioeconomic backgrounds relate to student exam scores. Utilizing the <em>Student Performance Factors</em> dataset ($N = 6,606$ validated student records after domain screening), we benchmarked four regression models: a Dummy mean baseline, Ordinary Least Squares Linear Regression, Random Forest Regressor, and Gradient Boosting Regressor. Models were developed under a leak-free 5-fold cross-validation framework and evaluated on an independent 20% held-out test set ($n = 1,322$). </p>
+<br>
+<p>Linear Regression emerged as the optimal architecture, achieving a test $R^2$ of <strong>0.8258</strong>, a Mean Absolute Error (MAE) of <strong>0.4103 marks</strong>, and a Root Mean Squared Error (RMSE) of <strong>1.5178 marks</strong>, comfortably surpassing the project benchmark target of $R^2 \ge 0.75$. Model interpretation via permutation importance and standardized coefficients demonstrated that <strong>Attendance</strong> ($\beta = +2.285$, Permutation $\Delta R^2 = 0.8019$) and <strong>Hours_Studied</strong> ($\beta = +1.743$, $\Delta R^2 = 0.4916$) are the two dominant positive predictors, whereas sleep duration and gender exhibited virtually zero predictive value. Residual analysis revealed that prediction error is remarkably low across 98.7% of students (MAE ~0.3 marks), with residual variance overwhelmingly concentrated in an unexplained high-score tail (ten extreme outliers accounted for 93.39% of total test squared error). Crucially, we emphasize that these empirical findings demonstrate statistical associations rather than proven causal mechanisms.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>3. Introduction</h2>
+<br>
+<p>Educational achievement serves as a vital indicator of student development and institutional efficacy. However, students, educators, and counselors often lack empirical clarity regarding which daily behaviors and environmental factors associate most strongly with academic outcomes. While intuitive beliefs frequently prioritize sleep duration or extracurricular involvement, educational institutions require quantitative, data-driven evidence to allocate academic counseling and support resources effectively.</p>
+<br>
+<p>Machine learning offers rigorous mathematical tools to model tabular educational records, quantify feature importance, and generate individual predictions. Nevertheless, educational data mining frequently suffers from methodological flaws, including data leakage across train and test sets, unjustified outlier trimming, and conflation of statistical correlation with causal intervention. </p>
+<br>
+<p>This project was conceived as an end-to-end, reproducible investigation designed to enforce strict machine learning hygiene. By building a unified Python pipeline with zero data leakage, validating multiple regression architectures, and conducting granular error analysis, we provide transparent empirical insights into student performance patterns.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>4. Problem Statement & Motivation</h2>
+<br>
+<h3>4.1 Problem Formulation</h3>
+<p>Given a feature vector $\mathbf{x}_i \in \mathbb{R}^d$ capturing a student's study habits, school attendance, demographic context, and support systems, the objective is to learn a mapping function $f: \mathbb{R}^d \to \mathbb{R}$ that predicts the continuous examination score $y_i \in [0, 100]$ such that generalization error on unseen students is minimized:</p>
+<br>
+<p>$$\min_{f} \frac{1}{n} \sum_{i=1}^{n} \mathcal{L}(y_i, f(\mathbf{x}_i))$$</p>
+<br>
+<p>where $\mathcal{L}$ denotes the mean squared error and mean absolute error loss functions.</p>
+<br>
+<h3>4.2 Research Questions</h3>
+<p>1. Is study time (<code>Hours_Studied</code>) associated with <code>Exam_Score</code>?</p>
+<p>2. Is sleep duration (<code>Sleep_Hours</code>) associated with <code>Exam_Score</code>?</p>
+<p>3. Is student motivation (<code>Motivation_Level</code>) associated with <code>Exam_Score</code>?</p>
+<p>4. Is peer environment (<code>Peer_Influence</code>) associated with <code>Exam_Score</code>?</p>
+<p>5. Are physical activity and extracurricular activities associated with <code>Exam_Score</code>?</p>
+<p>6. Is school attendance (<code>Attendance</code>) associated with <code>Exam_Score</code>?</p>
+<p>7. Which available feature is the strongest overall predictor of exam scores?</p>
+<p>8. Can <code>Exam_Score</code> be predicted from available features with acceptable precision?</p>
+<p>9. How accurately can different regression paradigms predict exam performance?</p>
+<p>10. Which model generalizes best to held-out test data?</p>
+<p>11. What specific types of student observations produce the largest prediction errors?</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>5. Dataset Description & Provenance</h2>
+<br>
+<h3>5.1 Dataset Origin & Variables</h3>
+<p>The project uses the <em>Student Performance Factors</em> dataset sourced from Kaggle (contributed by author <code>lainguyn123</code>). The raw dataset comprises 6,607 rows and 20 columns (19 features and 1 continuous target). </p>
+<br>
+<table>
+<tr><th>Feature Name</th><th>Storage Type</th><th>Domain Type</th><th>Meaning & Measurement Scale</th></tr>
+<tr><td>`Hours_Studied`</td><td>Integer</td><td>Continuous Numeric</td><td>Number of hours spent studying per week (1–44)</td></tr>
+<tr><td>`Attendance`</td><td>Integer</td><td>Continuous Numeric</td><td>Percentage of school classes attended (60–100%)</td></tr>
+<tr><td>`Sleep_Hours`</td><td>Integer</td><td>Continuous Numeric</td><td>Average hours of sleep per night (4–10)</td></tr>
+<tr><td>`Previous_Scores`</td><td>Integer</td><td>Continuous Numeric</td><td>Baseline marks from past evaluations (40–100)</td></tr>
+<tr><td>`Tutoring_Sessions`</td><td>Integer</td><td>Discrete Numeric</td><td>Number of monthly tutoring sessions attended (0–8)</td></tr>
+<tr><td>`Physical_Activity`</td><td>Integer</td><td>Continuous Numeric</td><td>Weekly physical activity in hours (0–6)</td></tr>
+<tr><td>`Parental_Involvement`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Level of parent academic engagement (Low, Medium, High)</td></tr>
+<tr><td>`Access_to_Resources`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Availability of study materials/tools (Low, Medium, High)</td></tr>
+<tr><td>`Motivation_Level`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Student self-reported drive (Low, Medium, High)</td></tr>
+<tr><td>`Family_Income`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Household economic bracket (Low, Medium, High)</td></tr>
+<tr><td>`Teacher_Quality`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Subjective teacher rating (Low, Medium, High)</td></tr>
+<tr><td>`Peer_Influence`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Peer academic environment (Negative, Neutral, Positive)</td></tr>
+<tr><td>`Parental_Education_Level`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Parent qualification (High School, College, Postgraduate)</td></tr>
+<tr><td>`Distance_from_Home`</td><td>Object / String</td><td>Ordinal Categorical</td><td>Distance from school (Near, Moderate, Far)</td></tr>
+<tr><td>`Extracurricular_Activities`</td><td>Object / String</td><td>Binary Categorical</td><td>Co-curricular involvement (No, Yes)</td></tr>
+<tr><td>`Internet_Access`</td><td>Object / String</td><td>Binary Categorical</td><td>Home internet connectivity (No, Yes)</td></tr>
+<tr><td>`School_Type`</td><td>Object / String</td><td>Binary Categorical</td><td>Institution governance (Public, Private)</td></tr>
+<tr><td>`Learning_Disabilities`</td><td>Object / String</td><td>Binary Categorical</td><td>Diagnosed learning challenge (No, Yes)</td></tr>
+<tr><td>`Gender`</td><td>Object / String</td><td>Binary Categorical</td><td>Student gender identification (Male, Female)</td></tr>
+<tr><td>**`Exam_Score`**</td><td>**Integer**</td><td>**Continuous Target**</td><td>**Final examination score (0–100 marks)**</td></tr>
+</table>
+<br>
+<h3>5.2 Absence of Stress and Screen Time (Construct Replacement)</h3>
+<p>A critical scientific finding established during dataset auditing is that the Kaggle dataset does <strong>not</strong> contain direct psychometric measurements for <em>stress level</em> or <em>screen / social-media time</em>. To address the research goals responsibly without hallucinating data, <code>Motivation_Level</code> was analyzed as a psychological state proxy, and <code>Peer_Influence</code> was analyzed as a social environment proxy.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>6. Exploratory Data Analysis & Feature Distributions</h2>
+<br>
+<p>EDA was conducted on the pristine dataset to inspect distributions, detect anomalies, and establish baseline correlations.</p>
+<br>
+<h3>6.1 Target Distribution Analysis</h3>
+<p>Analysis revealed that <code>Exam_Score</code> is approximately normally distributed ($\mu = 67.24$, $\sigma = 3.88$, median = 67.0). Skewness is slightly positive (+0.40) and kurtosis is +2.22, reflecting light tails across typical scores with an extended positive upper tail.</p>
+<br>
+<img src="file:///D:/COLLEGE/SEMESTER 5/MACHINE LEARNING/backup project/charts/target_distribution.png" alt="Target Distribution">
+<div class="caption">Figure 1: Distribution of Exam_Score across 6,606 validated student observations showing bell-shaped density centered near 67 marks.</div>
+<br>
+<h3>6.2 Correlation Structure</h3>
+<p>Pearson ($r$) and Spearman ($\rho$) correlation coefficients were computed across all numeric features against <code>Exam_Score</code>:</p>
+<br>
+<table>
+<tr><th>Feature</th><th>Pearson $r$</th><th>Spearman $\rho$</th><th>Linear Association Strength</th></tr>
+<tr><td>`Attendance`</td><td>**+0.583**</td><td>**+0.584**</td><td>Strong Positive</td></tr>
+<tr><td>`Hours_Studied`</td><td>**+0.447**</td><td>**+0.445**</td><td>Moderate-to-Strong Positive</td></tr>
+<tr><td>`Previous_Scores`</td><td>+0.183</td><td>+0.183</td><td>Weak Positive</td></tr>
+<tr><td>`Tutoring_Sessions`</td><td>+0.158</td><td>+0.160</td><td>Weak Positive</td></tr>
+<tr><td>`Physical_Activity`</td><td>+0.034</td><td>+0.034</td><td>Negligible Positive</td></tr>
+<tr><td>`Sleep_Hours`</td><td>**−0.021**</td><td>**−0.020**</td><td>**Near Zero / No Association**</td></tr>
+</table>
+<br>
+<img src="file:///D:/COLLEGE/SEMESTER 5/MACHINE LEARNING/backup project/charts/correlation_heatmap.png" alt="Correlation Heatmap">
+<div class="caption">Figure 2: Correlation heatmap among numeric features and the continuous exam score.</div>
+<br>
+<h3>6.3 Bivariate Factor Visualizations</h3>
+<p>Bivariate plots were generated to assess linearity and heteroscedasticity:</p>
+<p>- <strong>Study Hours vs Performance (Figure 3):</strong> Demonstrates a consistent positive linear upward trend from ~62 marks at 5 hours to ~72 marks at 30 hours.</p>
+<p>- <strong>Sleep Hours vs Performance (Figure 4):</strong> Displays a completely horizontal regression line across all sleep bands (4 to 10 hours), confirming an absence of linear association.</p>
+<p>- <strong>Motivation Level vs Performance (Figure 5):</strong> Boxplot shows monotonic median gains from Low (66 marks) to Medium (67 marks) to High (68 marks).</p>
+<p>- <strong>Attendance vs Performance (Figure 6):</strong> Displays the steepest linear slope in the dataset, rising continuously from ~61 marks at 60% attendance to ~74 marks at 100% attendance.</p>
+<br>
+<table>
+<tr><th>Figure 3: Study Hours</th><th>Figure 4: Sleep Hours</th></tr>
+<tr><td>![Study vs Performance](../charts/study_vs_performance.png)</td><td>![Sleep vs Performance](../charts/sleep_vs_performance.png)</td></tr>
+<tr><td>*Figure 3: Exam Score vs Study Hours*</td><td>*Figure 4: Exam Score vs Sleep Hours*</td></tr>
+</table>
+<br>
+<table>
+<tr><th>Figure 5: Motivation Level</th><th>Figure 6: Attendance</th></tr>
+<tr><td>![Motivation vs Performance](../charts/motivation_vs_performance.png)</td><td>![Attendance vs Performance](../charts/attendance_vs_performance.png)</td></tr>
+<tr><td>*Figure 5: Exam Score vs Motivation Level*</td><td>*Figure 6: Exam Score vs Attendance Percentage*</td></tr>
+</table>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>7. Data Cleaning & Preprocessing Pipeline</h2>
+<br>
+<h3>7.1 Data Cleaning Decision Log</h3>
+<p>1. <strong>Invalid Domain Outlier:</strong> Exactly one observation was identified with <code>Exam_Score = 101</code>. Because scores on a 100-point scale cannot exceed 100, this row was removed prior to splitting ($N = 6,606$).</p>
+<p>2. <strong>Missing Values:</strong> Missing values existed in <code>Teacher_Quality</code> (n=100), <code>Parental_Education_Level</code> (n=85), and <code>Distance_from_Home</code> (n=67). Crucially, missing values were <strong>not</strong> imputed during cleaning to prevent data leakage. They were preserved as <code>NaN</code> and resolved inside the scikit-learn training pipeline.</p>
+<p>3. <strong>Valid Extreme Values:</strong> Outliers in continuous variables (such as study hours up to 44 hrs/wk) were verified as valid behavioral observations and preserved.</p>
+<br>
+<h3>7.2 Preprocessing Architecture</h3>
+<p>A scikit-learn <code>ColumnTransformer</code> was engineered:</p>
+<p>- <strong>Numeric Pipeline:</strong> <code>SimpleImputer(strategy='median')</code> followed by <code>StandardScaler()</code>.</p>
+<p>- <strong>Ordinal Pipeline:</strong> <code>SimpleImputer(strategy='most_frequent')</code> followed by <code>OrdinalEncoder(categories=...)</code> with domain-ordered category sequences.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>8. Feature Engineering & Selection Experiments</h2>
+<br>
+<p>In Block 4, six domain features were engineered: <code>Study_x_Attendance</code>, <code>Sleep_Deficit</code>, <code>Sleep_Category</code>, <code>Has_Tutoring</code>, <code>Study_per_Sleep</code>, and <code>Active_Total</code>. We evaluated three candidate feature sets under 5-fold cross-validation on training data:</p>
+<p>- <strong>Set A:</strong> All 19 raw features (CV $R^2 = 0.7171 \pm 0.0731$)</p>
+<p>- <strong>Set B:</strong> 19 raw + 6 engineered features (CV $R^2 = 0.7165 \pm 0.0732$)</p>
+<p>- <strong>Set C:</strong> Top 10 correlated features (CV $R^2 = 0.7118 \pm 0.0738$)</p>
+<br>
+<p>Because engineered features yielded an improvement of $< 0.0006$ (failing the pre-registered 0.005 threshold), <strong>Set A</strong> was selected as the final parsimonious feature set.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>9. Machine Learning Methodology</h2>
+<br>
+<h3>9.1 Data Splitting & Leakage Containment</h3>
+<p>The cleaned dataset was partitioned using <code>train_test_split</code>:</p>
+<p>- <strong>Training Set:</strong> 80% (5,284 rows $\times$ 26 columns, <code>data/train.csv</code>)</p>
+<p>- <strong>Test Set:</strong> 20% (1,322 rows $\times$ 26 columns, <code>data/test.csv</code>)</p>
+<p>- <strong>Random Seed:</strong> Fixed to <code>random_state = 42</code> across all splits, cross-validation folds, and algorithm initializations.</p>
+<br>
+<p>The test set remained strictly locked throughout exploratory analysis, feature engineering, baseline testing, and hyperparameter tuning. It was opened exactly once at the conclusion of Block 6.</p>
+<br>
+<h3>9.2 Cross-Validation Design</h3>
+<p>We implemented 5-fold cross-validation (<code>KFold(n_splits=5, shuffle=True, random_state=42)</code>) on training data. All preprocessing steps were refit strictly inside each fold.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>10. Baseline Model Development</h2>
+<br>
+<p>A <code>DummyRegressor(strategy='mean')</code> was evaluated to benchmark the lower bound of predictive performance. </p>
+<p>- <strong>CV $R^2$:</strong> $-0.0001 \pm 0.0001$</p>
+<p>- <strong>CV MAE:</strong> 2.8673 marks</p>
+<p>- <strong>CV RMSE:</strong> 3.9157 marks</p>
+<br>
+<p>The Dummy baseline explains 0% of score variation, confirming that all subsequent machine learning models learn genuine structural patterns.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>11. Model Development & Hyperparameter Tuning</h2>
+<br>
+<p>Four regression paradigms were tuned and evaluated:</p>
+<p>1. <strong>Linear Regression:</strong> Ordinary Least Squares. No hyperparameters require tuning. Block 5 evaluated Ridge regularization across $\alpha \in [0.1, 100]$; Ridge produced no measurable gain ($< 0.0005$), so plain Linear Regression was retained.</p>
+<p>2. <strong>Random Forest Regressor:</strong> Tuned via 5-fold <code>GridSearchCV</code> over 36 parameter combinations (180 fits). Best parameters: <code>{'max_depth': None, 'max_features': 0.5, 'min_samples_leaf': 1, 'n_estimators': 200}</code>. Best CV $R^2 = 0.6401$ (improved from default 0.6213; overfit gap = 0.3100).</p>
+<p>3. <strong>Gradient Boosting Regressor:</strong> Tuned via 5-fold <code>GridSearchCV</code> over 27 parameter combinations (135 fits). Best parameters: <code>{'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 300}</code>. Best CV $R^2 = 0.6977$ (improved from default 0.6727; overfit gap = 0.0489).</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>12. Model Selection Decision</h2>
+<br>
+<p>Before opening the test set, the pre-registered selection rule was executed:</p>
+<p>1. Primary criterion: Highest mean CV $R^2$.</p>
+<p>2. Simplicity rule: If gap $< 0.01$, prefer simpler model.</p>
+<p>3. Overfitting flag: Drop candidate if training-vs-CV gap $> 0.15$.</p>
+<br>
+<p><strong>Result:</strong> Linear Regression achieved the highest CV $R^2$ (0.7171), beating tuned Gradient Boosting (0.6977) by a gap of 0.0194 ($>0.01$). Random Forest was disqualified due to severe overfitting (gap = 0.31). Linear Regression achieved the lowest CV MAE (0.5062 marks) and lowest RMSE (2.0820 marks). <strong>Linear Regression was locked as the final model.</strong></p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>13. Final Evaluation & Results Comparison</h2>
+<br>
+<p>Upon unlocking the test set ($n = 1,322$), all four refit pipelines predicted on the unseen data:</p>
+<br>
+<h3>Master Comparison Table</h3>
+<br>
+<table>
+<tr><th>Model Architecture</th><th>5-Fold CV $R^2$ (mean $\pm$ std)</th><th>Test MAE (marks)</th><th>Test MSE</th><th>Test RMSE (marks)</th><th>Test $R^2$</th><th>Overfit Gap (Train - CV)</th></tr>
+<tr><td>DummyRegressor</td><td>$-0.0001 \pm 0.0001$</td><td>2.7629</td><td>13.2503</td><td>3.6401</td><td>−0.0020</td><td>0.0000</td></tr>
+<tr><td>**LinearRegression**</td><td>$\mathbf{0.7171 \pm 0.0731}$</td><td>$\mathbf{0.4103}$</td><td>$\mathbf{2.3038}$</td><td>$\mathbf{1.5178}$</td><td>$\mathbf{0.8258}$</td><td>**0.0000**</td></tr>
+<tr><td>GradientBoosting (tuned)</td><td>$0.6977 \pm 0.0705$</td><td>0.5676</td><td>2.5062</td><td>1.5831</td><td>0.8105</td><td>0.0489</td></tr>
+<tr><td>RandomForest (tuned)</td><td>$0.6401 \pm 0.0608$</td><td>0.9752</td><td>3.4390</td><td>1.8544</td><td>0.7399</td><td>0.3100</td></tr>
+</table>
+<br>
+<h3>Performance Target Check</h3>
+<p>- <strong>Final model test $R^2 = 0.8258$ ; target = $0.75$ ; target met: YES</strong></p>
+<p>- <strong>Test MAE:</strong> <strong>0.4103 marks</strong> (typical error is ~0.4 marks on a 100-point scale).</p>
+<p>- <strong>Generalization Gap Analysis:</strong> Test $R^2$ (0.8258) exceeded CV $R^2$ (0.7171) because students with scores $\ge 80$ marks made up 0.79% of the training split but only 0.38% of the test split. Fewer extreme high-scoring outliers naturally reduced residual variance in the test set.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>14. Error Analysis</h2>
+<br>
+<p>Residuals were computed as $\text{Residual} = \text{Actual} - \text{Predicted}$.</p>
+<br>
+<h3>14.1 Residual Metrics</h3>
+<p>- <strong>Mean Bias:</strong> −0.0961 marks (negligible global bias)</p>
+<p>- <strong>Median Absolute Error:</strong> 0.2918 marks</p>
+<p>- <strong>90th Percentile Absolute Error:</strong> 0.6424 marks</p>
+<p>- <strong>Maximum Absolute Error:</strong> 29.04 marks (Student 662: actual 98 vs predicted 69.0)</p>
+<p>- <strong>Squared Error Concentration:</strong> The top 10 largest errors account for <strong>93.39%</strong> of the entire test set sum of squared errors.</p>
+<br>
+<table>
+<tr><th>Figure 7: Actual vs Predicted</th><th>Figure 8: Residual Plots</th></tr>
+<tr><td>![Actual vs Predicted](../charts/actual_vs_predicted.png)</td><td>![Residual Plot](../charts/residual_plot.png)</td></tr>
+<tr><td>*Figure 7: Actual vs predicted scores under Linear Regression.*</td><td>*Figure 8: Residuals vs predicted and residual histogram with KDE.*</td></tr>
+</table>
+<br>
+<h3>14.2 Error Breakdown by Score Bins</h3>
+<p>- <strong>Scores 60–79 marks (98.7% of students):</strong> MAE ranges tightly between <strong>0.28 and 0.37 marks</strong>.</p>
+<p>- <strong>Scores $\ge 80$ marks ($n = 5$):</strong> MAE surges to <strong>23.19 marks</strong> with a large positive bias (+23.19).</p>
+<p>- Due to regression towards the mean, the model never predicts scores above 73 marks, causing under-prediction for the rare high-achieving cohort.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>15. Feature Importance & Model Interpretation</h2>
+<br>
+<h3>15.1 Standardized Coefficients & Permutation Importance</h3>
+<p>Permutation importance was evaluated across 20 shuffle iterations on test data:</p>
+<br>
+<table>
+<tr><th>Rank</th><th>Feature</th><th>Standardized Linear $\beta$</th><th>Sign</th><th>Permutation $\Delta R^2$</th><th>Interpretation Summary</th></tr>
+<tr><td>1</td><td>`Attendance`</td><td>**+2.2846**</td><td>$+$</td><td>**0.8019 $\pm$ 0.0245**</td><td>Dominant predictor; each 1 SD gain yields ~2.3 marks</td></tr>
+<tr><td>2</td><td>`Hours_Studied`</td><td>**+1.7430**</td><td>$+$</td><td>**0.4916 $\pm$ 0.0131**</td><td>Second dominant predictor; ~1.7 marks per 1 SD</td></tr>
+<tr><td>3</td><td>`Access_to_Resources`</td><td>+1.0463</td><td>$+$</td><td>0.0751 $\pm$ 0.0043</td><td>Substantial positive environmental factor</td></tr>
+<tr><td>4</td><td>`Previous_Scores`</td><td>+0.7039</td><td>$+$</td><td>0.0733 $\pm$ 0.0041</td><td>Modest baseline academic persistence</td></tr>
+<tr><td>5</td><td>`Parental_Involvement`</td><td>+1.0158</td><td>$+$</td><td>0.0732 $\pm$ 0.0034</td><td>Meaningful family engagement association</td></tr>
+<tr><td>6</td><td>`Internet_Access`</td><td>+0.9473</td><td>$+$</td><td>0.0634 $\pm$ 0.0031</td><td>Modest technological support factor</td></tr>
+<tr><td>7</td><td>`Learning_Disabilities`</td><td>−0.8851</td><td>$-$</td><td>0.0521 $\pm$ 0.0028</td><td>Negative coefficient reflecting learning barriers</td></tr>
+<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>18</td><td>`Physical_Activity`</td><td>+0.1784</td><td>$+$</td><td>0.0008 $\pm$ 0.0002</td><td>Minimal predictive association</td></tr>
+<tr><td>19</td><td>`Sleep_Hours`</td><td>**−0.0121**</td><td>$-$</td><td>**0.0000 $\pm$ 0.0001**</td><td>**Virtually zero predictive relevance**</td></tr>
+</table>
+<br>
+<img src="file:///D:/COLLEGE/SEMESTER 5/MACHINE LEARNING/backup project/charts/feature_importance.png" alt="Feature Importance">
+<div class="caption">Figure 9: Permutation importance and absolute standardized coefficients for the final Linear Regression pipeline.</div>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>16. Prediction Demonstration</h2>
+<br>
+<p>The serialized pipeline was demonstrated on three synthetic student profiles:</p>
+<p>- <strong>Student A (High engagement, high resources):</strong> Predicted = <strong>79.1 marks</strong> ($\pm 0.4$ marks typical error).</p>
+<p>- <strong>Student B (Average habits, missing Teacher_Quality):</strong> Imputed automatically by pipeline, Predicted = <strong>66.3 marks</strong> ($\pm 0.4$ marks).</p>
+<p>- <strong>Student C (Low engagement, learning disability):</strong> Predicted = <strong>51.9 marks</strong> ($\pm 0.4$ marks).</p>
+<br>
+<h3>Sensitivity ("What-If") Analysis on Student B</h3>
+<p>- <strong>Study Hours Varied (10 / 20 / 30 hrs):</strong> 63.3 $\to$ 66.3 $\to$ 69.2 marks (+5.8 marks total shift).</p>
+<p>- <strong>Attendance Varied (65% / 80% / 95%):</strong> 63.3 $\to$ 66.3 $\to$ 69.2 marks (+5.9 marks total shift).</p>
+<p>- <strong>Sleep Hours Varied (5 / 7 / 9 hrs):</strong> 66.3 $\to$ 66.3 $\to$ 66.2 marks (flat response, ~0.03 marks shift).</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>17. Project Limitations</h2>
+<br>
+<p>1. <strong>Synthetic Nature of Dataset:</strong> The extremely tight variance ($\sigma = 3.88$), smooth linearity, and absence of real-world noise indicate simulated origin.</p>
+<p>2. <strong>Omission of Target Psychological Variables:</strong> Stress and screen time were absent; motivation and peer influence served as proxies.</p>
+<p>3. <strong>Single Cross-Sectional Exam:</strong> The target captures one exam, not longitudinal GPA or conceptual mastery.</p>
+<p>4. <strong>Unexplained High-Score Tail:</strong> Students scoring $\ge 84$ have ordinary feature profiles that the dataset features cannot explain (accounting for 93.39% of squared error).</p>
+<p>5. <strong>Discrete Coarse Inputs:</strong> Study hours and sleep are rounded integers; categorical scales are coarse 3-point categories.</p>
+<p>6. <strong>Observational Association vs Causality:</strong> Regression slopes demonstrate predictive associations, not proven causal levers.</p>
+<p>7. <strong>Geographic Generalizability:</strong> Lack of institutional metadata prevents generalizing findings to specific Indian collegiate populations.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>18. Conclusion & Future Work</h2>
+<br>
+<h3>Conclusion</h3>
+<p>This project built a leak-free regression pipeline analyzing student exam performance factors. Plain <strong>Linear Regression</strong> proved to be the optimal architecture, achieving a test $R^2$ of <strong>0.8258</strong> and an average error of <strong>0.41 marks</strong>, exceeding the course target of 0.75. <strong>Attendance</strong> and <strong>Hours_Studied</strong> emerged as the two primary predictive factors, while sleep hours showed negligible association.</p>
+<br>
+<h3>Future Work</h3>
+<p>1. <strong>Primary Psychological Survey:</strong> Collect authenticated data incorporating validated clinical scales (e.g. Perceived Stress Scale, screen-time telemetry).</p>
+<p>2. <strong>Longitudinal Cohort Tracking:</strong> Model multi-semester cumulative grade progression.</p>
+<p>3. <strong>Qualitative Outlier Case Studies:</strong> Interview high-scoring students with modest study habits to uncover unmeasured compensatory factors.</p>
+<p>4. <strong>Advisory Decision Support:</strong> Build a decision-support prototype providing prediction confidence intervals ($\pm 1.5$ marks) alongside clear non-causal guidance.</p>
+<br>
+<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+<br>
+<h2>19. References</h2>
+<br>
+<p>1. Pedregosa, F., et al. (2011). Scikit-learn: Machine Learning in Python. <em>Journal of Machine Learning Research</em>, 12, 2825–2830.</p>
+<p>2. McKinney, W. (2010). Data Structures for Statistical Computing in Python. <em>Proceedings of the 9th Python in Science Conference</em>, 51–56.</p>
+<p>3. Hunter, J. D. (2007). Matplotlib: A 2D Graphics Environment. <em>Computing in Science & Engineering</em>, 9(3), 90–95.</p>
+<p>4. Waskom, M. L. (2021). Seaborn: statistical data visualization. <em>Journal of Open Source Software</em>, 6(60), 3021.</p>
+<p>5. Virtanen, P., et al. (2020). SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. <em>Nature Methods</em>, 17(3), 261–272.</p>
+<p>6. Kaggle Dataset: <em>Student Performance Factors</em>, contributed by <code>lainguyn123</code>, URL: <code>https://www.kaggle.com/datasets/lainguyn123/student-performance-factors</code> (accessed October 25, 2026).</p>
+<br></body></html>

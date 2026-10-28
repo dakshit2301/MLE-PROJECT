@@ -1,0 +1,217 @@
+{
+  "permutation": [
+    {
+      "feature": "Attendance",
+      "mean_decrease_r2": 0.8019,
+      "std": 0.0245,
+      "rank": 1
+    },
+    {
+      "feature": "Hours_Studied",
+      "mean_decrease_r2": 0.4916,
+      "std": 0.0131,
+      "rank": 2
+    },
+    {
+      "feature": "Access_to_Resources",
+      "mean_decrease_r2": 0.0751,
+      "std": 0.0043,
+      "rank": 3
+    },
+    {
+      "feature": "Previous_Scores",
+      "mean_decrease_r2": 0.0733,
+      "std": 0.0041,
+      "rank": 4
+    },
+    {
+      "feature": "Parental_Involvement",
+      "mean_decrease_r2": 0.0732,
+      "std": 0.0034,
+      "rank": 5
+    },
+    {
+      "feature": "Tutoring_Sessions",
+      "mean_decrease_r2": 0.056,
+      "std": 0.0033,
+      "rank": 6
+    },
+    {
+      "feature": "Family_Income",
+      "mean_decrease_r2": 0.0256,
+      "std": 0.0022,
+      "rank": 7
+    },
+    {
+      "feature": "Peer_Influence",
+      "mean_decrease_r2": 0.0235,
+      "std": 0.0016,
+      "rank": 8
+    },
+    {
+      "feature": "Motivation_Level",
+      "mean_decrease_r2": 0.0212,
+      "std": 0.0022,
+      "rank": 9
+    },
+    {
+      "feature": "Parental_Education_Level",
+      "mean_decrease_r2": 0.0199,
+      "std": 0.0026,
+      "rank": 10
+    },
+    {
+      "feature": "Distance_from_Home",
+      "mean_decrease_r2": 0.0168,
+      "std": 0.0019,
+      "rank": 11
+    },
+    {
+      "feature": "Teacher_Quality",
+      "mean_decrease_r2": 0.0131,
+      "std": 0.0014,
+      "rank": 12
+    },
+    {
+      "feature": "Internet_Access",
+      "mean_decrease_r2": 0.0114,
+      "std": 0.0016,
+      "rank": 13
+    },
+    {
+      "feature": "Extracurricular_Activities",
+      "mean_decrease_r2": 0.0107,
+      "std": 0.0016,
+      "rank": 14
+    },
+    {
+      "feature": "Learning_Disabilities",
+      "mean_decrease_r2": 0.0077,
+      "std": 0.0019,
+      "rank": 15
+    },
+    {
+      "feature": "Physical_Activity",
+      "mean_decrease_r2": 0.0072,
+      "std": 0.0013,
+      "rank": 16
+    },
+    {
+      "feature": "Gender",
+      "mean_decrease_r2": 0.0001,
+      "std": 0.0,
+      "rank": 17
+    },
+    {
+      "feature": "School_Type",
+      "mean_decrease_r2": 0.0,
+      "std": 0.0,
+      "rank": 18
+    },
+    {
+      "feature": "Sleep_Hours",
+      "mean_decrease_r2": -0.0001,
+      "std": 0.0001,
+      "rank": 19
+    }
+  ],
+  "coefficients": [
+    {
+      "feature": "Attendance",
+      "coefficient": 2.284560281060654,
+      "sign": "positive"
+    },
+    {
+      "feature": "Hours_Studied",
+      "coefficient": 1.7429875832291197,
+      "sign": "positive"
+    },
+    {
+      "feature": "Access_to_Resources",
+      "coefficient": 1.0462986561106493,
+      "sign": "positive"
+    },
+    {
+      "feature": "Parental_Involvement",
+      "coefficient": 1.0158059435546976,
+      "sign": "positive"
+    },
+    {
+      "feature": "Internet_Access",
+      "coefficient": 0.9473424777685753,
+      "sign": "positive"
+    },
+    {
+      "feature": "Learning_Disabilities",
+      "coefficient": -0.8850749573670345,
+      "sign": "negative"
+    },
+    {
+      "feature": "Previous_Scores",
+      "coefficient": 0.703901377126755,
+      "sign": "positive"
+    },
+    {
+      "feature": "Tutoring_Sessions",
+      "coefficient": 0.5951572246404807,
+      "sign": "positive"
+    },
+    {
+      "feature": "Extracurricular_Activities",
+      "coefficient": 0.5501593601789316,
+      "sign": "positive"
+    },
+    {
+      "feature": "Motivation_Level",
+      "coefficient": 0.5402047023078973,
+      "sign": "positive"
+    },
+    {
+      "feature": "Teacher_Quality",
+      "coefficient": 0.5276151530775295,
+      "sign": "positive"
+    },
+    {
+      "feature": "Parental_Education_Level",
+      "coefficient": 0.5065226351040281,
+      "sign": "positive"
+    },
+    {
+      "feature": "Family_Income",
+      "coefficient": 0.5006675766145114,
+      "sign": "positive"
+    },
+    {
+      "feature": "Peer_Influence",
+      "coefficient": 0.49435399844623407,
+      "sign": "positive"
+    },
+    {
+      "feature": "Distance_from_Home",
+      "coefficient": -0.46343489587730524,
+      "sign": "negative"
+    },
+    {
+      "feature": "Physical_Activity",
+      "coefficient": 0.17837718773313704,
+      "sign": "positive"
+    },
+    {
+      "feature": "Gender",
+      "coefficient": 0.014772926924133206,
+      "sign": "positive"
+    },
+    {
+      "feature": "Sleep_Hours",
+      "coefficient": -0.012127195127697799,
+      "sign": "negative"
+    },
+    {
+      "feature": "School_Type",
+      "coefficient": -0.009370989433860182,
+      "sign": "negative"
+    }
+  ],
+  "tree": [],
+  "note": "Predictive importance is not causal importance."
+}

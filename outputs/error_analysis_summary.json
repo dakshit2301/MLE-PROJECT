@@ -1,0 +1,70 @@
+{
+  "overall_metrics": {
+    "mean_residual_bias": -0.0961,
+    "std_residual": 1.5148,
+    "test_mae": 0.4103,
+    "test_rmse": 1.5178,
+    "median_absolute_error": 0.2918,
+    "p90_absolute_error": 0.6424,
+    "max_absolute_error": 29.042,
+    "top10_squared_error_share_pct": 93.39
+  },
+  "error_by_actual_bin": [
+    {
+      "Actual Score Bin": "Below 60",
+      "Count": 12,
+      "MAE": 0.4469,
+      "Mean Residual (Bias)": -0.4173
+    },
+    {
+      "Actual Score Bin": "60-64",
+      "Count": 285,
+      "MAE": 0.3658,
+      "Mean Residual (Bias)": -0.2766
+    },
+    {
+      "Actual Score Bin": "65-69",
+      "Count": 714,
+      "MAE": 0.3212,
+      "Mean Residual (Bias)": -0.1824
+    },
+    {
+      "Actual Score Bin": "70-74",
+      "Count": 285,
+      "MAE": 0.2834,
+      "Mean Residual (Bias)": -0.1052
+    },
+    {
+      "Actual Score Bin": "75-79",
+      "Count": 21,
+      "MAE": 0.3203,
+      "Mean Residual (Bias)": 0.0501
+    },
+    {
+      "Actual Score Bin": "80+",
+      "Count": 5,
+      "MAE": 23.1885,
+      "Mean Residual (Bias)": 23.1885
+    }
+  ],
+  "flagged_groups": [
+    {
+      "category": "Family_Income",
+      "group": "High",
+      "mae": 0.5221,
+      "count": 241
+    },
+    {
+      "category": "Learning_Disabilities",
+      "group": "Yes",
+      "mae": 0.7735,
+      "count": 119
+    },
+    {
+      "category": "Attendance Band",
+      "group": "70-79",
+      "mae": 0.5125,
+      "count": 337
+    }
+  ]
+}

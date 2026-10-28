@@ -1,0 +1,515 @@
+{
+  "path": "A",
+  "model_name": "LinearRegression",
+  "features_used": [
+    {
+      "name": "Hours_Studied",
+      "kind": "numeric",
+      "min": 1,
+      "max": 44,
+      "median": 20.0,
+      "step": 1,
+      "label": "Hours studied per week"
+    },
+    {
+      "name": "Attendance",
+      "kind": "numeric",
+      "min": 60,
+      "max": 100,
+      "median": 80.0,
+      "step": 1,
+      "label": "Attendance percentage"
+    },
+    {
+      "name": "Sleep_Hours",
+      "kind": "numeric",
+      "min": 4,
+      "max": 10,
+      "median": 7.0,
+      "step": 1,
+      "label": "Sleep hours per night"
+    },
+    {
+      "name": "Previous_Scores",
+      "kind": "numeric",
+      "min": 50,
+      "max": 100,
+      "median": 75.0,
+      "step": 1,
+      "label": "Previous exam score"
+    },
+    {
+      "name": "Tutoring_Sessions",
+      "kind": "numeric",
+      "min": 0,
+      "max": 8,
+      "median": 1.0,
+      "step": 1,
+      "label": "Tutoring sessions"
+    },
+    {
+      "name": "Physical_Activity",
+      "kind": "numeric",
+      "min": 0,
+      "max": 6,
+      "median": 3.0,
+      "step": 1,
+      "label": "Physical activity days per week"
+    },
+    {
+      "name": "Parental_Involvement",
+      "kind": "categorical",
+      "options": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium",
+      "label": "Parental involvement"
+    },
+    {
+      "name": "Access_to_Resources",
+      "kind": "categorical",
+      "options": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium",
+      "label": "Access to resources"
+    },
+    {
+      "name": "Motivation_Level",
+      "kind": "categorical",
+      "options": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium",
+      "label": "Motivation level"
+    },
+    {
+      "name": "Family_Income",
+      "kind": "categorical",
+      "options": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium",
+      "label": "Family income"
+    },
+    {
+      "name": "Teacher_Quality",
+      "kind": "categorical",
+      "options": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium",
+      "label": "Teacher quality"
+    },
+    {
+      "name": "Peer_Influence",
+      "kind": "categorical",
+      "options": [
+        "Negative",
+        "Neutral",
+        "Positive"
+      ],
+      "mode": "Positive",
+      "label": "Peer influence"
+    },
+    {
+      "name": "Parental_Education_Level",
+      "kind": "categorical",
+      "options": [
+        "High School",
+        "College",
+        "Postgraduate"
+      ],
+      "mode": "High School",
+      "label": "Parental education level"
+    },
+    {
+      "name": "Distance_from_Home",
+      "kind": "categorical",
+      "options": [
+        "Near",
+        "Moderate",
+        "Far"
+      ],
+      "mode": "Near",
+      "label": "Distance from home"
+    },
+    {
+      "name": "Extracurricular_Activities",
+      "kind": "categorical",
+      "options": [
+        "No",
+        "Yes"
+      ],
+      "mode": "Yes",
+      "label": "Extracurricular activities"
+    },
+    {
+      "name": "Internet_Access",
+      "kind": "categorical",
+      "options": [
+        "No",
+        "Yes"
+      ],
+      "mode": "Yes",
+      "label": "Internet access"
+    },
+    {
+      "name": "School_Type",
+      "kind": "categorical",
+      "options": [
+        "Public",
+        "Private"
+      ],
+      "mode": "Public",
+      "label": "School type"
+    },
+    {
+      "name": "Learning_Disabilities",
+      "kind": "categorical",
+      "options": [
+        "No",
+        "Yes"
+      ],
+      "mode": "No",
+      "label": "Learning disabilities"
+    },
+    {
+      "name": "Gender",
+      "kind": "categorical",
+      "options": [
+        "Male",
+        "Female"
+      ],
+      "mode": "Male",
+      "label": "Gender"
+    }
+  ],
+  "features_not_used": [
+    "Active_Total",
+    "Has_Tutoring",
+    "Sleep_Category",
+    "Sleep_Deficit",
+    "Study_per_Sleep",
+    "Study_x_Attendance"
+  ],
+  "categorical": {
+    "Parental_Involvement": {
+      "order": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium"
+    },
+    "Access_to_Resources": {
+      "order": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium"
+    },
+    "Motivation_Level": {
+      "order": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium"
+    },
+    "Family_Income": {
+      "order": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium"
+    },
+    "Teacher_Quality": {
+      "order": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "mode": "Medium"
+    },
+    "Peer_Influence": {
+      "order": [
+        "Negative",
+        "Neutral",
+        "Positive"
+      ],
+      "mode": "Positive"
+    },
+    "Parental_Education_Level": {
+      "order": [
+        "High School",
+        "College",
+        "Postgraduate"
+      ],
+      "mode": "High School"
+    },
+    "Distance_from_Home": {
+      "order": [
+        "Near",
+        "Moderate",
+        "Far"
+      ],
+      "mode": "Near"
+    },
+    "Extracurricular_Activities": {
+      "order": [
+        "No",
+        "Yes"
+      ],
+      "mode": "Yes"
+    },
+    "Internet_Access": {
+      "order": [
+        "No",
+        "Yes"
+      ],
+      "mode": "Yes"
+    },
+    "School_Type": {
+      "order": [
+        "Public",
+        "Private"
+      ],
+      "mode": "Public"
+    },
+    "Learning_Disabilities": {
+      "order": [
+        "No",
+        "Yes"
+      ],
+      "mode": "No"
+    },
+    "Gender": {
+      "order": [
+        "Male",
+        "Female"
+      ],
+      "mode": "Male"
+    }
+  },
+  "engineered": [
+    {
+      "name": "Study_x_Attendance",
+      "formula_text": "Hours_Studied * Attendance / 100",
+      "used_by_model": false
+    },
+    {
+      "name": "Sleep_Deficit",
+      "formula_text": "max(0, 7 - Sleep_Hours)",
+      "used_by_model": false
+    },
+    {
+      "name": "Sleep_Category",
+      "formula_text": "0 if Sleep_Hours < 6; 1 if Sleep_Hours <= 8; otherwise 2",
+      "used_by_model": false
+    },
+    {
+      "name": "Has_Tutoring",
+      "formula_text": "1 if Tutoring_Sessions > 0; otherwise 0",
+      "used_by_model": false
+    },
+    {
+      "name": "Study_per_Sleep",
+      "formula_text": "Hours_Studied / Sleep_Hours (0 if Sleep_Hours is 0)",
+      "used_by_model": false
+    },
+    {
+      "name": "Active_Total",
+      "formula_text": "Physical_Activity + 1 if Extracurricular_Activities == 'Yes'",
+      "used_by_model": false
+    }
+  ],
+  "column_order": [
+    "num__Hours_Studied",
+    "num__Attendance",
+    "num__Sleep_Hours",
+    "num__Previous_Scores",
+    "num__Tutoring_Sessions",
+    "num__Physical_Activity",
+    "ord__Parental_Involvement",
+    "ord__Access_to_Resources",
+    "ord__Motivation_Level",
+    "ord__Family_Income",
+    "ord__Teacher_Quality",
+    "ord__Peer_Influence",
+    "ord__Parental_Education_Level",
+    "ord__Distance_from_Home",
+    "ord__Extracurricular_Activities",
+    "ord__Internet_Access",
+    "ord__School_Type",
+    "ord__Learning_Disabilities",
+    "ord__Gender"
+  ],
+  "imputation_modes": {
+    "Parental_Involvement": "Medium",
+    "Access_to_Resources": "Medium",
+    "Motivation_Level": "Medium",
+    "Family_Income": "Medium",
+    "Teacher_Quality": "Medium",
+    "Peer_Influence": "Positive",
+    "Parental_Education_Level": "High School",
+    "Distance_from_Home": "Near",
+    "Extracurricular_Activities": "Yes",
+    "Internet_Access": "Yes",
+    "School_Type": "Public",
+    "Learning_Disabilities": "No",
+    "Gender": "Male"
+  },
+  "scaler": {
+    "columns": [
+      "Hours_Studied",
+      "Attendance",
+      "Sleep_Hours",
+      "Previous_Scores",
+      "Tutoring_Sessions",
+      "Physical_Activity"
+    ],
+    "mean": [
+      20.009084027252083,
+      79.99507948523845,
+      7.022142316426949,
+      75.03425435276306,
+      1.4911052233156699,
+      2.97331566994701
+    ],
+    "scale": [
+      5.9672263493240605,
+      11.533201521382479,
+      1.4697562552492998,
+      14.363157828059443,
+      1.2326449981345649,
+      1.0297649634326385
+    ]
+  },
+  "coefficients": {
+    "intercept": 61.669954095102284,
+    "values": {
+      "num__Hours_Studied": 1.7429875832291197,
+      "num__Attendance": 2.284560281060654,
+      "num__Sleep_Hours": -0.012127195127697799,
+      "num__Previous_Scores": 0.703901377126755,
+      "num__Tutoring_Sessions": 0.5951572246404807,
+      "num__Physical_Activity": 0.17837718773313704,
+      "ord__Parental_Involvement": 1.0158059435546976,
+      "ord__Access_to_Resources": 1.0462986561106493,
+      "ord__Motivation_Level": 0.5402047023078973,
+      "ord__Family_Income": 0.5006675766145114,
+      "ord__Teacher_Quality": 0.5276151530775295,
+      "ord__Peer_Influence": 0.49435399844623407,
+      "ord__Parental_Education_Level": 0.5065226351040281,
+      "ord__Distance_from_Home": -0.46343489587730524,
+      "ord__Extracurricular_Activities": 0.5501593601789316,
+      "ord__Internet_Access": 0.9473424777685753,
+      "ord__School_Type": -0.009370989433860182,
+      "ord__Learning_Disabilities": -0.8850749573670345,
+      "ord__Gender": 0.014772926924133206
+    }
+  },
+  "output_clip": [
+    0,
+    100
+  ],
+  "uncertainty": {
+    "mae": 0.4103,
+    "rmse": 1.5178,
+    "p90_abs_error": 0.6424
+  },
+  "presets": [
+    {
+      "name": "Student A",
+      "description": "High engagement and high resources",
+      "inputs": {
+        "Hours_Studied": 28,
+        "Attendance": 95,
+        "Sleep_Hours": 8,
+        "Previous_Scores": 85,
+        "Tutoring_Sessions": 3,
+        "Physical_Activity": 4,
+        "Parental_Involvement": "High",
+        "Access_to_Resources": "High",
+        "Motivation_Level": "High",
+        "Family_Income": "High",
+        "Teacher_Quality": "High",
+        "Peer_Influence": "Positive",
+        "Parental_Education_Level": "Postgraduate",
+        "Distance_from_Home": "Near",
+        "Extracurricular_Activities": "Yes",
+        "Internet_Access": "Yes",
+        "School_Type": "Private",
+        "Learning_Disabilities": "No",
+        "Gender": "Female"
+      }
+    },
+    {
+      "name": "Student B",
+      "description": "Average profile with missing teacher quality",
+      "inputs": {
+        "Hours_Studied": 20,
+        "Attendance": 80,
+        "Sleep_Hours": 7,
+        "Previous_Scores": 69,
+        "Tutoring_Sessions": 1,
+        "Physical_Activity": 3,
+        "Parental_Involvement": "Medium",
+        "Access_to_Resources": "Medium",
+        "Motivation_Level": "Medium",
+        "Family_Income": "Medium",
+        "Teacher_Quality": null,
+        "Peer_Influence": "Neutral",
+        "Parental_Education_Level": "College",
+        "Distance_from_Home": "Moderate",
+        "Extracurricular_Activities": "No",
+        "Internet_Access": "Yes",
+        "School_Type": "Public",
+        "Learning_Disabilities": "No",
+        "Gender": "Male"
+      }
+    },
+    {
+      "name": "Student C",
+      "description": "Low engagement and resources; learning disability",
+      "inputs": {
+        "Hours_Studied": 10,
+        "Attendance": 65,
+        "Sleep_Hours": 6,
+        "Previous_Scores": 55,
+        "Tutoring_Sessions": 0,
+        "Physical_Activity": 1,
+        "Parental_Involvement": "Low",
+        "Access_to_Resources": "Low",
+        "Motivation_Level": "Low",
+        "Family_Income": "Low",
+        "Teacher_Quality": "Low",
+        "Peer_Influence": "Negative",
+        "Parental_Education_Level": "High School",
+        "Distance_from_Home": "Far",
+        "Extracurricular_Activities": "No",
+        "Internet_Access": "No",
+        "School_Type": "Public",
+        "Learning_Disabilities": "Yes",
+        "Gender": "Male"
+      }
+    }
+  ],
+  "model_check": {
+    "manual_pipeline_max_abs_difference": 0.0,
+    "engineered_features_used_by_model": []
+  }
+}
