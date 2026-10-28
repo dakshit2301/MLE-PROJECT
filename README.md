@@ -1,154 +1,124 @@
 # Exam Stress & Student Performance Predictor
 
-An end-to-end, leak-free machine learning project analyzing how student study habits, attendance, social-environmental factors, and academic background associate with final examination scores. Built as an empirical, reproducible pipeline, the project benchmarks four regression models (Dummy Baseline, Linear Regression, Random Forest, and Gradient Boosting) using rigorous 5-fold cross-validation and a locked test-set evaluation. *Note on dataset variables:* Because the underlying dataset did not contain direct psychometric measurements for stress or screen time, motivation level and peer influence were evaluated as domain-appropriate proxies, as documented throughout the project.
+An educational machine-learning project that analyzes the relationship between student-reported habits and academic factors and a single examination score. The project includes a reproducible scikit-learn notebook, saved analysis outputs, and an optional local frontend that reproduces the saved model in the browser.
 
----
+> **Scope and interpretation:** The prediction target is `Exam_Score`, not stress, screen time, or CGPA. Stress and screen time do not appear in the dataset. Reported associations and model estimates are not evidence of causation, study advice, or a real student's exam result.
 
-## Course & Team Information
+## Project information
 
-- **Course:** ECSCI24302 – Machine Learning Essentials (Project-Based Learning)
-- **Institution:** [University / College Name — TO BE FILLED]
-- **Academic Term:** Semester 5
-- **Faculty Guide / Mentor:** [Guide / Professor Name — TO BE FILLED]
-- **Team Members:**
-  - `[Name 1 — Roll / Enrolment No. — Contribution: to be filled]`
-  - `[Name 2 — Roll / Enrolment No. — Contribution: to be filled]`
-  - `[Name 3 — Roll / Enrolment No. — Contribution: to be filled]`
-  - `[Name 4 — Roll / Enrolment No. — Contribution: to be filled]`
+- **Course:** ECSCI24302 — Machine Learning Essentials (Project-Based Learning)
+- **Academic term:** Semester 5
+- **Institution, faculty guide, and team details:** Add the confirmed information before academic submission; it is not included here because it was not available for verification.
+- **Code license:** The repository includes an MIT `LICENSE` for the project code. This does not establish a license for the dataset.
 
----
+## Dataset and data quality
 
-## Dataset Description
+The project files identify the source as the Kaggle *Student Performance Factors* dataset. The candidate Kaggle URL and uploader attribution in the project have not been independently confirmed. Verify the canonical URL, uploader, dataset license, and access date before making a formal citation or redistributing the data. A copy of the source CSV is included at the repository root and in `data/raw_dataset.csv`; these two files were verified byte-identical.
 
-- **Dataset Name:** Student Performance Factors
-- **Platform / Source:** Kaggle (`Student Performance Factors.csv`)
-- **Expected URL:** `https://www.kaggle.com/datasets/lainguyn123/student-performance-factors` *(TO BE CONFIRMED BY STUDENT)*
-- **Author:** `lainguyn123` *(TO BE CONFIRMED BY STUDENT)*
-- **License:** CC BY 4.0 / Public Domain *(TO BE CONFIRMED BY STUDENT)*
-- **Date Accessed:** `2026-10-25`
-- **Dimensions:** 6,607 original rows, 20 columns (19 features + 1 continuous target: `Exam_Score`). One domain-invalid row (`Exam_Score > 100`) was removed in Block 2, leaving 6,606 validated records.
+The raw dataset contains **6,607 rows and 20 columns** (19 predictors and `Exam_Score`). One row with an impossible score of 101 was removed using the 0–100 score domain rule, leaving **6,606 cleaned rows**. The three columns with missing values retain a total of 235 missing cells; they are imputed inside the training pipeline rather than during initial cleaning. No duplicate rows were found.
 
----
+The saved split contains **5,284 training rows** and **1,322 held-out test rows**. Six numeric and thirteen categorical predictors are used by the final model. Six engineered columns are also present in the split files for analysis, but the saved final model does not use those engineered columns.
 
-## Project Structure
+## Repository layout
 
 ```text
-exam-stress-performance-correlator/
+.
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── Student Performance Factors.csv    # byte-identical copy of data/raw_dataset.csv
 ├── data/
-│   ├── raw_dataset.csv                 # Pristine copy of raw Kaggle dataset (6607 rows)
-│   ├── cleaned_dataset.csv             # Cleaned dataset (6606 rows, NaN preserved for pipeline imputation)
-│   ├── train.csv                       # 80% split (5284 rows, includes engineered features)
-│   └── test.csv                        # 20% split (1322 rows, locked until final evaluation)
+│   ├── raw_dataset.csv
+│   ├── cleaned_dataset.csv
+│   ├── train.csv
+│   └── test.csv
 ├── notebook/
-│   └── exam_stress_performance_correlator.ipynb  # Comprehensive 27-section executable notebook
-├── charts/                             # Publication-quality charts (150 DPI)
-│   ├── target_distribution.png         # Chart 1: Target distribution & normality
-│   ├── correlation_heatmap.png         # Chart 2: Feature correlation matrix
-│   ├── study_vs_performance.png        # Chart 3: Study hours vs Exam Score
-│   ├── sleep_vs_performance.png        # Chart 4: Sleep hours vs Exam Score
-│   ├── motivation_vs_performance.png   # Chart 5: Motivation level vs Exam Score
-│   ├── attendance_vs_performance.png   # Chart 6: Attendance vs Exam Score
-│   ├── actual_vs_predicted.png         # Chart 7: Final model actual vs predicted
-│   ├── residual_plot.png               # Chart 8: Residual vs predicted & distribution
-│   ├── feature_importance.png          # Chart 9: Permutation & coefficient importances
-│   ├── outlier_boxplots.png            # Numeric feature boxplots
-│   ├── numeric_feature_distributions.png# Univariate histograms
-│   └── cv_r2_comparison.png           # Cross-validation R² comparison
-├── outputs/
-│   ├── dataset_validation.json         # Raw dataset structural audit
-│   ├── data_quality_summary.json       # Missing values & outlier counts
-│   ├── correlation_table.csv           # Pearson & Spearman correlation metrics
-│   ├── feature_config.json             # Selected feature set specifications
-│   ├── cv_results.csv                  # Default & tuned cross-validation results
-│   ├── tuning_results.json             # GridSearchCV parameters & scores
-│   ├── test_predictions.csv            # Test set predictions across all models
-│   ├── final_model.joblib              # Serialized final scikit-learn Pipeline
-│   ├── final_comparison_table.csv      # Master comparison table
-│   ├── error_analysis_summary.json     # Subgroup & range error metrics
-│   ├── feature_importance.csv          # Ranked permutation importance table
-│   └── PROJECT_STATE.md                # Persistent multi-block state document
+│   └── exam_stress_performance_correlator.ipynb
+├── charts/                            # Saved EDA, model, and error-analysis charts
+├── outputs/                           # Validation, metrics, predictions, and final model
+│   ├── final_model.joblib
+│   ├── final_comparison_table.csv
+│   ├── test_predictions.csv
+│   └── PROJECT_STATE.md
 ├── reports/
-│   ├── final_report.md                 # 18-section comprehensive academic project report
-│   └── viva_questions.md              # 50 detailed viva examination preparation questions
-├── requirements.txt                    # Pinned library dependencies
-└── README.md                           # Project overview & reproduction guide
+│   ├── final_report.md
+│   ├── final_report.html
+│   └── viva_questions.md
+├── frontend/                          # Optional local Study Lab application
+│   ├── index.html
+│   ├── export_data.py
+│   ├── js/
+│   ├── css/
+│   ├── data/                          # Generated JSON exports
+│   └── tests/
+└── qa_tests/
+    ├── E2E_TEST_REPORT.md
+    └── screenshots/
 ```
 
----
+The current repository snapshot contains Markdown and HTML reports; it does not contain a `final_report.pdf`. The source viva document and frontend export each contain **45 numbered questions (Q1–Q45)** across nine groups. The viva document's introduction still claims 52 questions, so reconcile that count before submission.
 
-## How to Reproduce & Run
+## Run the frontend
 
-1. **Python Environment:** Requires Python 3.10+ (tested on Python 3.14).
-2. **Clone / Open Workspace:** Open the `exam-stress-performance-correlator/` root directory in your editor or terminal.
-3. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. **Execute Notebook:**
-   - Launch Jupyter Lab or Notebook:
-     ```bash
-     jupyter lab
-     ```
-   - Open `notebook/exam_stress_performance_correlator.ipynb`.
-   - **Important:** The notebook uses relative paths (`../data`, `../charts`, `../outputs`) and must be run with the kernel's working directory set to `notebook/`.
-   - Select **Kernel → Restart & Run All**. The entire notebook executes top-to-bottom without manual intervention.
+The Study Lab frontend is a static local web app. It uses the saved LinearRegression model specification in the browser; it does not start a prediction API or retrain the model.
 
----
+Use Python **3.14+** with the pinned dependencies in `requirements.txt` (validated with Python 3.14.6). In PowerShell, from the project root:
 
-## Workflow Summary
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+Set-Location frontend
+python export_data.py
+python -m http.server 8000
+```
 
-The project proceeds systematically across 27 ordered notebook sections:
-1. **Sections 1–5:** Setup, objective definition, dataset integrity checks, and data dictionary mapping.
-2. **Sections 6–7:** Deep data quality auditing (missing values, types, outliers) and domain-grounded cleaning.
-3. **Sections 8–9:** Exploratory data analysis, univariate/bivariate visualizations, and Pearson/Spearman correlation.
-4. **Sections 10–13:** Feature engineering exploration, leak-free 80/20 splitting, feature selection, and preprocessor pipeline assembly.
-5. **Sections 14–18:** Baseline and model training (Dummy, Linear Regression, Random Forest, Gradient Boosting) under 5-fold CV.
-6. **Sections 19–21:** Hyperparameter tuning via GridSearchCV on training CV, pre-committed model selection, locked test evaluation, and master comparison.
-7. **Sections 22–24:** Residual error analysis, permutation feature importances, and interactive student prediction demonstrations.
-8. **Sections 25–27:** Final findings synthesis, limitations discussion, and actionable future directions.
+Open <http://localhost:8000> and keep the terminal open while using the app. Press `Ctrl+C` to stop the server. After initial setup, if the saved model and outputs have not changed, start it next time with:
 
----
+```powershell
+Set-Location frontend
+python -m http.server 8000
+```
 
-## Final Results & Target Status
+Run `python export_data.py` again only after intentionally changing or regenerating the saved ML outputs/model. For frontend validation, from the `frontend` directory run:
 
-**Master Comparison Table (`outputs/final_comparison_table.csv`):**
+```powershell
+python tests\schema_check.py
+python tests\parity_test.py
+```
 
-| Model | 5-Fold CV $R^2$ (mean $\pm$ std) | Test MAE (marks) | Test MSE | Test RMSE (marks) | Test $R^2$ |
-|---|---|---|---|---|---|
-| DummyRegressor (Mean Baseline) | $-0.0001 \pm 0.0001$ | 2.7629 | 13.2503 | 3.6401 | $-0.0020$ |
-| **LinearRegression** | $\mathbf{0.7171 \pm 0.0731}$ | $\mathbf{0.4103}$ | $\mathbf{2.3038}$ | $\mathbf{1.5178}$ | $\mathbf{0.8258}$ |
-| GradientBoostingRegressor (tuned) | $0.6977 \pm 0.0705$ | 0.5676 | 2.5062 | 1.5831 | 0.8105 |
-| RandomForestRegressor (tuned) | $0.6401 \pm 0.0608$ | 0.9752 | 3.4390 | 1.8544 | 0.7399 |
+The parity test also requires Node.js. See [frontend/FRONTEND_README.md](frontend/FRONTEND_README.md) for the page tour, data flow, and QA details.
 
-- **Performance Target:** Required test $R^2 \ge 0.75$.
-- **Result:** **Final model test $R^2 = 0.8258$ ; target = $0.75$ ; target met: YES**
-- **Typical Prediction Error:** Test MAE is **$0.41$ marks** (on average, predictions deviate by ~0.4 marks on a 100-point scale).
-- **Generalization Gap Explanation:** Test $R^2$ (0.8258) is higher than CV $R^2$ (0.7171) because high-scoring students ($\ge 80$ marks), who represent the main source of residual variance, constituted $0.79\%$ of the training set but only $0.38\%$ of the random test split. With fewer extreme outliers, the test $R^2$ naturally evaluates higher.
+## Run the machine-learning notebook
 
----
+Install `requirements.txt`, open `notebook/exam_stress_performance_correlator.ipynb` in VS Code with the Jupyter extension or in a Jupyter installation, and select the project `.venv` interpreter/kernel. Set the notebook kernel's working directory to `notebook/` before running all cells; the notebook uses relative paths such as `../data`, `../charts`, and `../outputs`. JupyterLab itself is not pinned in `requirements.txt` and may need to be installed separately.
 
-## Key Findings
+The notebook has 27 numbered sections and 120 code cells. It performs data checks and EDA, creates and evaluates a training-only preprocessing pipeline, compares four regression estimators with five-fold cross-validation, tunes candidates using training data, evaluates the selected model on the held-out test split, and saves error-analysis and feature-importance outputs.
 
-1. **Attendance is the Dominant Predictor:** Attendance showed the highest correlation ($r = 0.58$), the largest standardized regression coefficient ($\beta = +2.285$), and highest permutation importance ($\Delta R^2 = 0.8019$). A 1 SD increase (~14% attendance) is associated with ~2.3 marks higher predicted score.
-2. **Study Time is the Second Strongest Factor:** Study hours showed strong positive association ($r = 0.45$, $\beta = +1.743$, $\Delta R^2 = 0.4916$). Each additional standard deviation of study time (~5.6 hrs/wk) is associated with ~1.7 marks higher score.
-3. **Sleep Hours Showed Near-Zero Predictive Value:** Variations in sleep duration exhibited no statistical association with exam performance ($r = -0.02$, $\beta = -0.012$, $\Delta R^2 = 0.0000$).
-4. **Linear Regression Outperformed Complex Non-Linear Ensembles:** Plain Linear Regression matched the dataset's underlying additive linear structure better than Random Forest or Gradient Boosting, while avoiding tree-based overfitting and offering complete interpretability.
-5. **Errors are Concentrated in an Unexplained High-Score Tail:** Across 98.7% of students (scores 55–79 marks), prediction errors are tiny (MAE ~0.3 marks). However, 10 extreme high-score outliers ($\ge 84$ marks) account for **93.39%** of the entire sum of squared errors.
+## Saved model results
 
----
+Values below are from `outputs/final_comparison_table.csv`; the LinearRegression values are also recorded in the generated frontend metadata.
 
-## Limitations
+| Model | 5-fold CV R² (mean ± SD) | Test MAE | Test MSE | Test RMSE | Test R² |
+|---|---:|---:|---:|---:|---:|
+| DummyRegressor | -0.0001 ± 0.0001 | 2.7629 | 13.2503 | 3.6401 | -0.0020 |
+| **LinearRegression (selected)** | **0.7171 ± 0.0731** | **0.4103** | **2.3038** | **1.5178** | **0.8258** |
+| GradientBoosting (tuned) | 0.6977 ± 0.0705 | 0.5676 | 2.5062 | 1.5831 | 0.8105 |
+| RandomForest (tuned) | 0.6401 ± 0.0608 | 0.9752 | 3.4390 | 1.8544 | 0.7399 |
 
-1. **Synthetic / Simulated Data Signature:** Characteristics such as a narrow target spread (std ~3.9), near-perfect linearity, and lack of noise suggest the dataset was synthetically generated.
-2. **Omission of Stress and Screen Time:** Direct psychometric measurements for stress and screen telemetry were missing; proxy variables (motivation, peer influence) were studied instead.
-3. **Single Exam Snapshot:** The target is an isolated exam mark rather than longitudinal cumulative GPA or sustained conceptual learning.
-4. **Coarse Input Scales:** Key inputs (study hours, sleep hours) are rounded integers, and categorical attributes are measured on coarse 3-point ordinal scales.
-5. **Non-Causal Associative Evidence:** Statistical coefficients show associations within historical survey responses, not proven causal mechanisms.
+The project target is test R² ≥ 0.75. The selected model meets that target on the held-out test set (**0.8258**) but its mean cross-validation R² (**0.7171**) is below the target. The test score being higher than CV is documented as a split-specific effect associated with the rare extreme-score tail; it is not evidence that the model generalizes better than CV suggests.
 
----
+Test MAE is **0.4103 marks**, RMSE is **1.5178 marks**, and the 90th percentile absolute error is **0.6424 marks** on this held-out split. These are aggregate evaluation summaries, not per-student confidence intervals or guarantees.
 
-## Academic Integrity & Acknowledgements
+## Findings and limitations
 
-- **Dataset Citation:** *Student Performance Factors*, Kaggle dataset by `lainguyn123`.
-- **Core Software:** Python, scikit-learn (Pedregosa et al., 2011), pandas, NumPy, Matplotlib, Seaborn, and SciPy.
-- **AI Coding Assistance Statement:** An agentic AI coding assistant was utilized as a pair-programming tool for structuring code and verifying pipeline integrity; all project methodology, statistical logic, interpretations, and results have been thoroughly reviewed, understood, and defended by the student team.
+- In the saved permutation-importance results, Attendance ranks first (mean decrease in R²: 0.8019), followed by Hours_Studied (0.4916). These are predictive importance values for this dataset, not causal effects.
+- The ten largest held-out squared errors account for 93.39% of the total squared error, showing that average metrics do not describe every score range equally well.
+- The dataset has no stress, screen-time, or CGPA fields; the model cannot measure or predict those outcomes.
+- The target is one exam-score snapshot, and the dataset's source provenance and possible synthetic-data characteristics need confirmation.
+- The report describes associations and model limitations; it does not establish real-world causes or intervention effects.
+- The Viva question-count discrepancy noted above remains unresolved.
+
+## References and acknowledgements
+
+The dataset is identified in project files as *Student Performance Factors* from Kaggle; confirm its canonical source, uploader, and license before final citation. Python, pandas, NumPy, scikit-learn, SciPy, Matplotlib, and Seaborn are used in the analysis. Follow your course's disclosure rules when documenting AI-assisted work and verify the submitted report and project details yourself.
