@@ -29,6 +29,8 @@ An educational machine-learning project that analyzes the relationship between s
   - Krushal Patel
   - Dakshit
   - Prince
+
+    
 Institution, faculty guide, and team details should be verified before academic submission.
 
 ## Project Features
